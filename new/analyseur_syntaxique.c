@@ -1044,13 +1044,16 @@ void optIndice(void)
 	affiche_balise_fermante(__FUNCTION__,1);
 }
 
-void appelFct(void)
+n_appel appelFct(void)
 {
+	n_appel *$$ = NULL;
+	n_l_exp *$1=NULL;
 	affiche_balise_ouvrante(__FUNCTION__,1);
 	if(uniteCourante==ID_FCT)
 	{
 		nom_token(uniteCourante,nom,valeur);
 		affiche_element(nom,valeur,1);
+		$1=valeur;
 		uniteCourante=yylex();
 		if(uniteCourante==PARENTHESE_OUVRANTE)
 		{
@@ -1059,14 +1062,15 @@ void appelFct(void)
 			uniteCourante=yylex();
 			if(est_premier(_listeExpressions_,uniteCourante) || est_suivant(_listeExpressions_,uniteCourante))
 			{
-				listeExpressions();
+				$1=listeExpressions();
 				if(uniteCourante==PARENTHESE_FERMANTE)
 				{
 					nom_token(uniteCourante,nom,valeur);
 					affiche_element(nom,valeur,1);
 					uniteCourante=yylex();
+					$$=cree_n_appel(valeur,$1);
 					affiche_balise_fermante(__FUNCTION__,1);
-					return;
+					return $$;
 				}
 			}
 			
@@ -1076,27 +1080,33 @@ void appelFct(void)
 	affiche_balise_fermante(__FUNCTION__,1);
 }
 
-void listeExpressions(void)
+n_l_exp listeExpressions()
 {
+	n_l_exp $$=NULL;
+	n_exp *$1=NULL;
+	n_l_exp *$2=NULL;
 	affiche_balise_ouvrante(__FUNCTION__,1);
 	if(est_premier(_expression_,uniteCourante))
 	{
-		expression();
-		listeExpressionsBis();
+		$1=expression();
+		$2=listeExpressionsBis($1);
 		affiche_balise_fermante(__FUNCTION__,1);
-		return;
+		$$=cree_n_l_exp($1,$2);
+		return $$;
 	}
 	else if(est_suivant(_listeExpressions_,uniteCourante))
 	{
 		affiche_balise_fermante(__FUNCTION__,1);
-		return;
+		return $2;
 	}
 	else erreur_syntaxe();
 	affiche_balise_fermante(__FUNCTION__,1);
 }
 
-void listeExpressionsBis(void)
+n_l_exp listeExpressionsBis(n_exp h)
 {
+	n_exp *$1=NULL;
+	n_l_exp *$2=NULL;
 	affiche_balise_ouvrante(__FUNCTION__,1);
 	if(uniteCourante==VIRGULE)
 	{
@@ -1105,16 +1115,16 @@ void listeExpressionsBis(void)
 		uniteCourante=yylex();
 		if(est_premier(_expression_,uniteCourante))
 		{
-			expression();
-			listeExpressionsBis();
+			$1=expression();
+			$2=listeExpressionsBis($1);
 			affiche_balise_fermante(__FUNCTION__,1);
-			return;
+			return $2;
 		}
 	}
 	else if(est_suivant(_listeExpressionsBis_,uniteCourante))
 		{
 			affiche_balise_fermante(__FUNCTION__,1);
-			return;
+			return $2;
 		}
 	else erreur_syntaxe();	
 	affiche_balise_fermante(__FUNCTION__,1);
