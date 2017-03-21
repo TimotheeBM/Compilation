@@ -1,0 +1,7 @@
+entier $a, entier $b;
+main()
+{
+$a=3;
+$b=4;
+if(($a < 4) | ($b < $a))$a = $b;
+}
