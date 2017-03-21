@@ -44,5 +44,6 @@ void optIndice(void);
 void appelFct(void);
 void listeExpressions(void);
 void listeExpressionsBis(void);
+void instructionFaire(void);
 
 #endif
