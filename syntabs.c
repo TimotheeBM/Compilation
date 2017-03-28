@@ -1,7 +1,7 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include"util.h"
-#include"syntabs.h"
+#include <stdio.h>
+#include <stdlib.h>
+#include "util.h"
+#include "syntabs.h"
 
 n_appel *cree_n_appel(char *fonction, n_l_exp *args)
 {

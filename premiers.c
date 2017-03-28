@@ -43,6 +43,7 @@ void initialise_premiers(void){
   premiers[_instruction_][RETOUR] = 1;
   premiers[_instruction_][ECRIRE] = 1;
   premiers[_instruction_][POINT_VIRGULE] = 1;
+  premiers[_instruction_][FAIRE] = 1;
   
   premiers[_instructionAffect_][ID_VAR] = 1;
   
@@ -156,6 +157,8 @@ void initialise_premiers(void){
   
   premiers[_listeExpressionsBis_][VIRGULE] = 1;
   premiers[_listeExpressionsBis_][EPSILON] = 1;
+  
+  premiers[_instructionFaire_][FAIRE] = 1;
 }
 
 int est_premier(int non_terminal, int terminal)

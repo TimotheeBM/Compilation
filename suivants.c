@@ -48,6 +48,7 @@ void initialise_suivants(void){
   suivants[_instruction_][ECRIRE] = 1;
   suivants[_instruction_][POINT_VIRGULE] = 1;
   suivants[_instruction_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instruction_][FAIRE] = 1;
   
   suivants[_instructionAffect_][ID_VAR] = 1;
   suivants[_instructionAffect_][ACCOLADE_OUVRANTE] = 1;
@@ -58,6 +59,7 @@ void initialise_suivants(void){
   suivants[_instructionAffect_][ECRIRE] = 1;
   suivants[_instructionAffect_][POINT_VIRGULE] = 1;
   suivants[_instructionAffect_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionAffect_][FAIRE] = 1;
   
   suivants[_instructionBloc_][ID_VAR] = 1;
   suivants[_instructionBloc_][ACCOLADE_OUVRANTE] = 1;
@@ -70,6 +72,7 @@ void initialise_suivants(void){
   suivants[_instructionBloc_][ACCOLADE_FERMANTE] = 1;
   suivants[_instructionBloc_][SINON] = 1;
   suivants[_instructionBloc_][FIN] = 1;
+  suivants[_instructionBloc_][FAIRE] = 1;
   
   suivants[_listeInstructions_][ACCOLADE_FERMANTE] = 1;
   
@@ -82,6 +85,7 @@ void initialise_suivants(void){
   suivants[_instructionSi_][ECRIRE] = 1;
   suivants[_instructionSi_][POINT_VIRGULE] = 1;
   suivants[_instructionSi_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionSi_][FAIRE] = 1;
   
   suivants[_optSinon_][ID_VAR] = 1;
   suivants[_optSinon_][ACCOLADE_OUVRANTE] = 1;
@@ -92,6 +96,7 @@ void initialise_suivants(void){
   suivants[_optSinon_][ECRIRE] = 1;
   suivants[_optSinon_][POINT_VIRGULE] = 1;
   suivants[_optSinon_][ACCOLADE_FERMANTE] = 1;
+  suivants[_optSinon_][FAIRE] = 1;
   
   suivants[_instructionTantque_][ID_VAR] = 1;
   suivants[_instructionTantque_][ACCOLADE_OUVRANTE] = 1;
@@ -102,6 +107,7 @@ void initialise_suivants(void){
   suivants[_instructionTantque_][ECRIRE] = 1;
   suivants[_instructionTantque_][POINT_VIRGULE] = 1;
   suivants[_instructionTantque_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionTantque_][FAIRE] = 1;
   
   suivants[_instructionAppel_][ID_VAR] = 1;
   suivants[_instructionAppel_][ACCOLADE_OUVRANTE] = 1;
@@ -112,6 +118,7 @@ void initialise_suivants(void){
   suivants[_instructionAppel_][ECRIRE] = 1;
   suivants[_instructionAppel_][POINT_VIRGULE] = 1;
   suivants[_instructionAppel_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionAppel_][FAIRE] = 1;
   
   suivants[_instructionRetour_][ID_VAR] = 1;
   suivants[_instructionRetour_][ACCOLADE_OUVRANTE] = 1;
@@ -122,6 +129,7 @@ void initialise_suivants(void){
   suivants[_instructionRetour_][ECRIRE] = 1;
   suivants[_instructionRetour_][POINT_VIRGULE] = 1;
   suivants[_instructionRetour_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionRetour_][FAIRE] = 1;
   
   suivants[_instructionEcriture_][ID_VAR] = 1;
   suivants[_instructionEcriture_][ACCOLADE_OUVRANTE] = 1;
@@ -132,6 +140,7 @@ void initialise_suivants(void){
   suivants[_instructionEcriture_][ECRIRE] = 1;
   suivants[_instructionEcriture_][POINT_VIRGULE] = 1;
   suivants[_instructionEcriture_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionEcriture_][FAIRE] = 1;
   
   suivants[_instructionVide_][ID_VAR] = 1;
   suivants[_instructionVide_][ACCOLADE_OUVRANTE] = 1;
@@ -142,6 +151,7 @@ void initialise_suivants(void){
   suivants[_instructionVide_][ECRIRE] = 1;
   suivants[_instructionVide_][POINT_VIRGULE] = 1;
   suivants[_instructionVide_][ACCOLADE_FERMANTE] = 1;
+  suivants[_instructionVide_][FAIRE] = 1;
   
   suivants[_expression_][POINT_VIRGULE] = 1;
   suivants[_expression_][ALORS] = 1;
@@ -317,6 +327,17 @@ void initialise_suivants(void){
   suivants[_listeExpressions_][PARENTHESE_FERMANTE] = 1;
   
   suivants[_listeExpressionsBis_][PARENTHESE_FERMANTE] = 1;
+  
+  suivants[_instructionFaire_][ID_VAR] = 1;
+  suivants[_instructionFaire_][ACCOLADE_OUVRANTE] = 1;
+  suivants[_instructionFaire_][SI] = 1;
+  suivants[_instructionFaire_][TANTQUE] = 1;
+  suivants[_instructionFaire_][ID_FCT] = 1;
+  suivants[_instructionFaire_][RETOUR] = 1;
+  suivants[_instructionFaire_][ECRIRE] = 1;
+  suivants[_instructionFaire_][POINT_VIRGULE] = 1;
+  suivants[_instructionFaire_][ACCOLADE_FERMANTE] = 1;
+
 }
 
 int est_suivant(int non_terminal, int terminal)
