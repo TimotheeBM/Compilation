@@ -124,7 +124,7 @@ n_l_dec *listeDecVariablesBis(void){
 n_dec *declarationVariable(void)
 {
 	n_dec *$$ = NULL;
-	int $1 = NULL;
+	int $1 = -1;
 	char *cpy_valeur = malloc(sizeof(valeur));
 
 	//~ affiche_balise_ouvrante(__FUNCTION__,1);
@@ -678,7 +678,7 @@ n_exp *expressionBis(n_exp *h)
 	else if(est_suivant(_expressionBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
-			return $$;
+			return h;
 		}
 	else erreur_syntaxe();
 	//~ affiche_balise_fermante(__FUNCTION__,1);
@@ -725,7 +725,7 @@ n_exp *conjonctionBis(n_exp *h)
 	else if(est_suivant(_conjonctionBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
-			return $$;
+			return h;
 		}
 	else erreur_syntaxe();
 	//~ affiche_balise_fermante(__FUNCTION__,1);
@@ -784,7 +784,7 @@ n_exp *comparaisonBis(n_exp *h)
 		else if(est_suivant(_comparaisonBis_,uniteCourante))
 			{
 				//~ affiche_balise_fermante(__FUNCTION__,1);
-				return $$;
+				return h;
 			}
 	else erreur_syntaxe();
 	//~ affiche_balise_fermante(__FUNCTION__,1);
@@ -843,7 +843,7 @@ n_exp *expArithBis(n_exp *h)
 		else if(est_suivant(_expArithBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
-			return $$;
+			return h;
 		}
 	else erreur_syntaxe();
 	//~ affiche_balise_fermante(__FUNCTION__,1);
@@ -902,7 +902,7 @@ n_exp *termeBis(n_exp *h)
 	else if(est_suivant(_termeBis_,uniteCourante))
 	{
 		//~ affiche_balise_fermante(__FUNCTION__,1);
-		return $$;
+		return h;
 	}
 	else erreur_syntaxe();
 	//~ affiche_balise_fermante(__FUNCTION__,1);
@@ -911,6 +911,7 @@ n_exp *termeBis(n_exp *h)
 n_exp *negation(void)
 {
 	n_exp *$1 = NULL;
+	n_exp *$$ = NULL;
 	
 	//~ affiche_balise_ouvrante(__FUNCTION__,1);
 	if(uniteCourante==NON)
@@ -921,8 +922,9 @@ n_exp *negation(void)
 		if (est_premier(_negation_,uniteCourante))
 		{
 			$1 = negation();
+			$$ = cree_n_exp_op(non, $1, NULL);
 			//~ affiche_balise_fermante(__FUNCTION__,1);
-			return $1;
+			return $$;
 		}
 	}
 	else if(est_premier(_facteur_,uniteCourante))
@@ -1070,11 +1072,13 @@ n_appel *appelFct(void)
 {
 	n_appel *$$ = NULL;
 	n_l_exp *$1 = NULL;
+	char *cpy_valeur = malloc(sizeof(valeur));
 	
 	//~ affiche_balise_ouvrante(__FUNCTION__,1);
 	if(uniteCourante==ID_FCT)
 	{
 		nom_token(uniteCourante,nom,valeur);
+		strcpy(cpy_valeur,valeur);
 		//~ affiche_element(nom,valeur,1);
 		uniteCourante=yylex();
 		if(uniteCourante==PARENTHESE_OUVRANTE)
@@ -1089,7 +1093,7 @@ n_appel *appelFct(void)
 				{
 					nom_token(uniteCourante,nom,valeur);
 					//~ affiche_element(nom,valeur,1);
-					$$ = cree_n_appel(valeur, $1);
+					$$ = cree_n_appel(cpy_valeur, $1);
 					uniteCourante=yylex();
 					//~ affiche_balise_fermante(__FUNCTION__,1);
 					return $$;

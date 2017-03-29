@@ -136,6 +136,7 @@ void affiche_instr_affect(n_instr *n)
 
   affiche_var(n->u.affecte_.var);
   affiche_exp(n->u.affecte_.exp);
+
   affiche_balise_fermante(fct, trace_abs);
 }
 
