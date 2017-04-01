@@ -92,7 +92,7 @@ int rechercheExecutable(char *identif)
 /**
   * Recherche si un identificateur est présent dans la table LOCALE
   * Cette fonction doit être utilisée pour s'assurer qu'il n'y a pas deux
-  * identificateurs avec le même lors d'une DÉCLARATION d'un identificateur.
+  * identificateurs avec le même nom lors d'une DÉCLARATION d'un identificateur.
   * @param identif Le nom de variable ou fonction que l'on cherche
   * @return Si oui, renvoie le numéro de ligne dans tabsymboles, si non -1  
   */
@@ -117,32 +117,32 @@ int rechercheDeclarative(char *identif) {
   * des options passées au compilateur.
   */
 void afficheTabsymboles(void) {
-  int i;
-  printf("------------------------------------------\n");
-  printf("base = %d\n", tabsymboles.base);
-  printf("sommet = %d\n", tabsymboles.sommet);
-  for(i=0; i < tabsymboles.sommet; i++){
-    printf("%d ", i);
-    printf("%s ", tabsymboles.tab[i].identif);
-    
-    if(tabsymboles.tab[i].portee == P_VARIABLE_GLOBALE)
-      printf("GLOBALE ");
-    else
-    if(tabsymboles.tab[i].portee == P_VARIABLE_LOCALE)
-      printf("LOCALE ");
-    else
-    if(tabsymboles.tab[i].portee == P_ARGUMENT)
-      printf("ARGUMENT ");
+	int i;
+	printf("------------------------------------------\n");
+	printf("base = %d\n", tabsymboles.base);
+	printf("sommet = %d\n", tabsymboles.sommet);
+	for(i=0; i < tabsymboles.sommet; i++){
+		printf("%d ", i);
+		printf("%s ", tabsymboles.tab[i].identif);
 
-    if(tabsymboles.tab[i].type == T_ENTIER)
-      printf("ENTIER ");
-    else if(tabsymboles.tab[i].type == T_TABLEAU_ENTIER)
-      printf("TABLEAU ");
-    else if(tabsymboles.tab[i].type == T_FONCTION)
-      printf("FONCTION ");
-    
-    printf("%d ", tabsymboles.tab[i].adresse);
-    printf("%d\n", tabsymboles.tab[i].complement);
+		if(tabsymboles.tab[i].portee == P_VARIABLE_GLOBALE)
+			printf("GLOBALE ");
+		else
+		if(tabsymboles.tab[i].portee == P_VARIABLE_LOCALE)
+			printf("LOCALE ");
+		else
+		if(tabsymboles.tab[i].portee == P_ARGUMENT)
+			printf("ARGUMENT ");
+
+		if(tabsymboles.tab[i].type == T_ENTIER)
+			printf("ENTIER ");
+		else if(tabsymboles.tab[i].type == T_TABLEAU_ENTIER)
+			printf("TABLEAU ");
+		else if(tabsymboles.tab[i].type == T_FONCTION)
+			printf("FONCTION ");
+
+		printf("%d ", tabsymboles.tab[i].adresse);
+		printf("%d\n", tabsymboles.tab[i].complement);
   }
   printf("------------------------------------------\n");
 }

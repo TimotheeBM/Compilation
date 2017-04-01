@@ -9,6 +9,7 @@
 #include "affiche_arbre_abstrait.h"
 #include "analyseur_syntaxique.h"
 #include "tabsymboles.h"
+#include "parcours.h"
 
 
 char yytext[100];
@@ -41,11 +42,13 @@ n_prog *programme(void)
 		$1 = optDecVariables();
 		$2 = listeDecFonctions();
 		$$ = cree_n_prog($1, $2);
-		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
+		//~ affiche_balise_fermante(__FUNCTION__,1);
 	}
-	else erreur_syntaxe();
-	//~ affiche_balise_fermante(__FUNCTION__,1);
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 }
 
 n_l_dec *optDecVariables(void)
@@ -64,13 +67,20 @@ n_l_dec *optDecVariables(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+		}
 	}
 	else if(est_suivant(_optDecVariables_,uniteCourante)) 
-	{
-		//~ affiche_balise_fermante(__FUNCTION__,1);
-		return $$;
+		{
+			//~ affiche_balise_fermante(__FUNCTION__,1);
+			return $$;
+		}
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
 	}
-	else erreur_syntaxe();
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -89,7 +99,10 @@ n_l_dec *listeDecVariables(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -111,13 +124,20 @@ n_l_dec *listeDecVariablesBis(void){
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+		}
 	}
 	else if(est_suivant(_listeDecVariablesBis_,uniteCourante))
 	{
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -147,9 +167,20 @@ n_dec *declarationVariable(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -176,6 +207,14 @@ int optTailleTableau(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
 	else if (est_suivant(_optTailleTableau_,uniteCourante))
@@ -183,7 +222,10 @@ int optTailleTableau(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -207,7 +249,10 @@ n_l_dec *listeDecFonctions(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
  
@@ -235,8 +280,15 @@ n_dec *declarationFonction(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -261,9 +313,20 @@ n_l_dec *listeParam(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $1;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -283,7 +346,10 @@ n_l_dec *optListeDecVariables(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $1;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -341,7 +407,10 @@ n_instr *instruction(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $1;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -372,10 +441,25 @@ n_instr *instructionAffect(void)
 					//~ affiche_balise_fermante(__FUNCTION__,1);
 					return $$;
 				}
+				else {
+					printf("Expression incorrecte !\n");
+					exit (-1);
+				}
+			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
 			}
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -402,9 +486,20 @@ n_instr *instructionBloc(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -428,7 +523,10 @@ n_l_instr *listeInstructions(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -461,10 +559,26 @@ n_instr *instructionSi(void)
 					//~ affiche_balise_fermante(__FUNCTION__,1);
 					return $$;
 				}
+				else {
+					printf("Expression incorrecte !\n");
+					exit (-1);
+				}
+			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
 			}
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
+		
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);	
 }
 
@@ -484,13 +598,20 @@ n_instr *optSinon(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $1;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(est_suivant(_optSinon_,uniteCourante))
 	{
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $1;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -521,10 +642,25 @@ n_instr *instructionTantque(void)
 					//~ affiche_balise_fermante(__FUNCTION__,1);
 					return $$;
 				}
+				else {
+					printf("Expression incorrecte !\n");
+					exit (-1);
+				}
+			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
 			}
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }		
 
@@ -546,8 +682,15 @@ n_instr *instructionAppel(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -574,9 +717,20 @@ n_instr *instructionRetour(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -613,11 +767,30 @@ n_instr *instructionEcriture(void)
 						//~ affiche_balise_fermante(__FUNCTION__,1);
 						return $$;
 					}
+					else {
+						printf("Expression incorrecte !\n");
+						exit (-1);
+					}
+				}
+				else {
+					printf("Expression incorrecte !\n");
+					exit (-1);
 				}
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -634,7 +807,10 @@ n_instr *instructionVide(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -650,7 +826,10 @@ n_exp *expression(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $2;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -674,13 +853,20 @@ n_exp *expressionBis(n_exp *h)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(est_suivant(_expressionBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return h;
 		}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -697,7 +883,10 @@ n_exp *conjonction(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $2;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -721,13 +910,20 @@ n_exp *conjonctionBis(n_exp *h)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(est_suivant(_conjonctionBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return h;
 		}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -743,7 +939,10 @@ n_exp *comparaison(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $2;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -766,6 +965,10 @@ n_exp *comparaisonBis(n_exp *h)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(uniteCourante==INFERIEUR)
 		{
@@ -780,13 +983,20 @@ n_exp *comparaisonBis(n_exp *h)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
 		}
 		else if(est_suivant(_comparaisonBis_,uniteCourante))
 			{
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return h;
 			}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -802,7 +1012,10 @@ n_exp *expArith(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $2;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -825,9 +1038,14 @@ n_exp *expArithBis(n_exp *h)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(uniteCourante==MOINS) 
 		{
+			
 			nom_token(uniteCourante,nom,valeur);
 			//~ affiche_element(nom,valeur,1);
 			uniteCourante=yylex();
@@ -839,13 +1057,20 @@ n_exp *expArithBis(n_exp *h)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
 		}
 		else if(est_suivant(_expArithBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return h;
 		}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -861,7 +1086,10 @@ n_exp *terme(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $2;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -884,6 +1112,10 @@ n_exp *termeBis(n_exp *h)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(uniteCourante==DIVISE)
 	{
@@ -898,13 +1130,20 @@ n_exp *termeBis(n_exp *h)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(est_suivant(_termeBis_,uniteCourante))
 	{
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return h;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -926,6 +1165,10 @@ n_exp *negation(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(est_premier(_facteur_,uniteCourante))
 	{
@@ -933,7 +1176,10 @@ n_exp *negation(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $1;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -960,6 +1206,14 @@ n_exp *facteur(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
 	else if(uniteCourante==NOMBRE)
@@ -1004,9 +1258,20 @@ n_exp *facteur(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -1031,8 +1296,15 @@ n_var *var(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -1056,6 +1328,14 @@ n_exp *optIndice(void)
 				//~ affiche_balise_fermante(__FUNCTION__,1);
 				return $$;
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
 		
@@ -1064,7 +1344,10 @@ n_exp *optIndice(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -1098,11 +1381,25 @@ n_appel *appelFct(void)
 					//~ affiche_balise_fermante(__FUNCTION__,1);
 					return $$;
 				}
+				else {
+					printf("Expression incorrecte !\n");
+					exit (-1);
+				}
 			}
-			
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}	
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -1126,7 +1423,10 @@ n_l_exp *listeExpressions(void)
 		//~ affiche_balise_fermante(__FUNCTION__,1);
 		return $$;
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -1150,13 +1450,20 @@ n_l_exp *listeExpressionsBis(void)
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
+		}
 	}
 	else if(est_suivant(_listeExpressionsBis_,uniteCourante))
 		{
 			//~ affiche_balise_fermante(__FUNCTION__,1);
 			return $$;
 		}
-	else erreur_syntaxe();	
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
@@ -1192,17 +1499,37 @@ n_instr *instructionFaire(void)
 						//~ affiche_balise_fermante(__FUNCTION__,1);
 						return $$;
 					}
+					else {
+						printf("Expression incorrecte !\n");
+						exit (-1);
+					}
+				}
+				else {
+					printf("Expression incorrecte !\n");
+					exit (-1);
 				}
 			}
+			else {
+				printf("Expression incorrecte !\n");
+				exit (-1);
+			}
+		}
+		else {
+			printf("Expression incorrecte !\n");
+			exit (-1);
 		}
 	}
-	else erreur_syntaxe();
+	else {
+		printf("Expression incorrecte !\n");
+		exit (-1);
+	}
 	//~ affiche_balise_fermante(__FUNCTION__,1);
 }
 
 int main(int argc, char **argv)
 {
 	int i;
+	n_prog *$$;
 	for(i=1;i<argc;i++)
 	{
 		if(strcmp(argv[i],"-l")==0)
@@ -1231,7 +1558,9 @@ int main(int argc, char **argv)
 		initialise_premiers();
 		initialise_suivants();
 		uniteCourante = yylex();
-		affiche_n_prog(programme());
+		$$=programme();
+		//~ affiche_n_prog($$);		//Arbre abstrait
+		parcours_n_prog($$);
 	}
  
   
