@@ -1,4 +1,5 @@
 #include "parcours.h"
+#include "syntabs.h"
 
 int portee=P_VARIABLE_GLOBALE;
 int adresseLocaleCourante=0;
@@ -8,8 +9,11 @@ int adresseArgumentCourant=0;
 void parcours_n_prog(n_prog *n)
 {
 	char *fct = "prog";
+	printf("\n%%include \"io.asm\"\nsection .bss\n	sinput resb 255\n");
 	parcours_l_dec(n->variables);
+	printf("section .text\nglobal _start\n_start:\n	call main\n	mov eax, 1\n	int 0x80\n");
 	parcours_l_dec(n->fonctions);
+	printf("	ret\n");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -48,14 +52,13 @@ void parcours_instr(n_instr *n)
 void parcours_instr_si(n_instr *n)
 {  
   char *fct = "instr_si";
-  //~ parcours_balise_ouvrante(fct, trace_abs);
 
   parcours_exp(n->u.si_.test);
   parcours_instr(n->u.si_.alors);
   if(n->u.si_.sinon){
     parcours_instr(n->u.si_.sinon);
   }
-  //~ parcours_balise_fermante(fct, trace_abs);
+  
 }
 
 /*-------------------------------------------------------------------------*/
@@ -103,6 +106,7 @@ void parcours_instr_affect(n_instr *n)
 		parcours_exp(n->u.affecte_.exp);
 	}
 	
+	printf("	pop ebx\n	mov [%s] ebx\n",n->u.affecte_.var->nom);
 }
 
 /*-------------------------------------------------------------------------*/
@@ -146,9 +150,8 @@ void parcours_instr_retour(n_instr *n)
 void parcours_instr_ecrire(n_instr *n)
 {
   char *fct = "instr_ecrire";
-  //~ parcours_balise_ouvrante(fct, trace_abs);
   parcours_exp(n->u.ecrire_.expression);
-  //~ parcours_balise_fermante(fct, trace_abs);
+  printf("	pop eax\n	call iprintLF\n");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -173,7 +176,7 @@ void parcours_exp(n_exp *n)
 	else if(n->type == opExp) parcours_opExp(n);
 	else if(n->type == intExp) parcours_intExp(n);
 	else if(n->type == appelExp) parcours_appelExp(n);
-	else if(n->type == lireExp) parcours_lireExp(n);
+	else if(n->type == lireExp) parcours_lireExp(n);	
 }
 
 /*-------------------------------------------------------------------------*/
@@ -184,19 +187,66 @@ void parcours_varExp(n_exp *n)
 	if (rechercheExecutable(n->u.var->nom)==-1){
 		parcours_var(n->u.var);
 	}
+	printf("	mov ebx, [%s]\n	push ebx\n",n->u.var->nom);
 }
 
 /*-------------------------------------------------------------------------*/
 void parcours_opExp(n_exp *n)
 {
   char *fct = "opExp";
- 
+  char debut[30], suite[30], sinon[30];
+  sprintf(debut,"debut_%p",debut);
+  sprintf(suite,"suite_%p",suite);
+  sprintf(sinon,"sinon_%p",sinon);
+  
   if( n->u.opExp_.op1 != NULL ) {
     parcours_exp(n->u.opExp_.op1);
   }
+  
   if( n->u.opExp_.op2 != NULL ) {
     parcours_exp(n->u.opExp_.op2);
+  }  
+  
+  if(n->u.opExp_.op == plus) printf("	pop ebx\n	pop eax\n	add eax, ebx\n	push eax\n");
+  else if(n->u.opExp_.op == moins) printf("	pop ebx\n	pop eax\n	sub eax, ebx\n	push eax\n");
+  else if(n->u.opExp_.op == fois) printf("	pop ebx\n	pop eax\n	mul ebx\n	push eax\n");
+  else if(n->u.opExp_.op == divise) printf("	pop ebx\n	pop eax\n	div ebx\n	push eax\n");
+  else if(n->u.opExp_.op == modulo) printf("	pop ebx\n	pop eax\n	div ebx\n	push edx\n");
+  
+  else if(n->u.opExp_.op == egal)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, ebx\n	jne %s\n	push 1\n	j %s\n%s:\n	push 0\n%s:\n",debut,sinon,suite,sinon,suite);
   }
+  else if(n->u.opExp_.op == diff)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, ebx\n	je %s\n	push 1\n	j %s\n%s:\n	push 0\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == inf)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, ebx\n	jge %s\n	push 1\n	j %s\n%s:\n	push 0\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == sup)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, ebx\n	jle %s\n	push 1\n	j %s\n%s:\n	push 0\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == infeg)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, ebx\n	jg %s\n	push 1\n	j %s\n%s:\n	push 0\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == supeg)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, ebx\n	jl %s\n	push 1\n	j %s\n%s:\n	push 0\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == ou)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, 0\n	je %s\n	push 1\n	j %s\n%s:\n	push ebx\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == et)
+  {
+	  printf("%s:\n	pop ebx\n	pop eax\n	cmp eax, 0\n	je %s\n	push 1\n	j %s\n%s:\n	push ebx\n%s:\n",debut,sinon,suite,sinon,suite);
+  }
+  else if(n->u.opExp_.op == non) printf("	pop ebx\n	pop eax\n");
+  else if(n->u.opExp_.op == negatif) printf("	pop ebx\n	pop eax\n");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -205,12 +255,14 @@ void parcours_intExp(n_exp *n)
 {
 	char texte[ 50 ]; // Max. 50 chiffres
 	sprintf(texte, "%d", n->u.entier);
+	printf("	mov ebx, %d\n	push ebx\n",n->u.entier);
 }
 
 /*-------------------------------------------------------------------------*/
 void parcours_lireExp(n_exp *n)
 {
 	char *fct = "lireExp";
+	printf("	mov eax, sinput\n	call readline\n	call atoi\n	push eax\n");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -228,7 +280,7 @@ void parcours_appelExp(n_exp *n)
 void parcours_l_dec(n_l_dec *n)
 {
 	char *fct = "l_dec";
-	if( n ){
+	if(n){
 		parcours_dec(n->tete);
 		parcours_l_dec(n->queue);
 	}
@@ -246,7 +298,7 @@ int nb_param(n_l_dec *n)
 /*-------------------------------------------------------------------------*/
 
 void parcours_dec(n_dec *n)
-{	
+{
 	if(n){
 		if(n->type == foncDec) {
 			parcours_foncDec(n);
@@ -265,20 +317,28 @@ void parcours_dec(n_dec *n)
 
 void parcours_foncDec(n_dec *n)
 {
-	ajouteIdentificateur(n->nom,portee,T_FONCTION,0,nb_param(n->u.foncDec_.param));
-	entreeFonction();
 	char *fct = "foncDec";
+	char etiquette[30];
+	ajouteIdentificateur(n->nom,portee,T_FONCTION,0,nb_param(n->u.foncDec_.param));
+	
+	sprintf(etiquette,"%s",n->nom);
+	
+	entreeFonction();
+	
 	
 	portee=P_ARGUMENT;
 	parcours_l_dec(n->u.foncDec_.param);		//arguments
 	
 	portee=P_VARIABLE_LOCALE;
 	adresseLocaleCourante=0;
+	
+	printf("%s:\n	push ebp\n	mov ebp, esp\n",etiquette);
+	
 	parcours_l_dec(n->u.foncDec_.variables);
 	parcours_instr(n->u.foncDec_.corps);
-	afficheTabsymboles();						//Affchage de la table de symboles
+	//~ afficheTabsymboles();						//Affchage de la table de symboles
 	sortieFonction();
-	
+	printf("	pop ebp\n	ret\n");
 }
 
 /*-------------------------------------------------------------------------*/
@@ -289,6 +349,14 @@ void parcours_varDec(n_dec *n)
 		ajouteIdentificateur(n->nom, portee, T_ENTIER, adresseLocaleCourante, 1);
 		adresseLocaleCourante+=4;
 	}
+	if(portee == P_VARIABLE_GLOBALE)
+	{
+		printf("	%s resw 1\n",n->nom);
+	}
+	if(portee == P_VARIABLE_LOCALE)
+	{
+		printf("	push ebp\n	mov ebp, esp\n	sub esp, %d\n",adresseLocaleCourante,adresseLocaleCourante);
+	}
 }
 
 /*-------------------------------------------------------------------------*/
@@ -298,6 +366,14 @@ void parcours_tabDec(n_dec *n)
 	char texte[100]; // Max. 100 chars nom tab + taille
 	sprintf(texte, "%s[%d]", n->nom, n->u.tabDec_.taille);
 	ajouteIdentificateur(n->nom,portee,T_TABLEAU_ENTIER,adresseLocaleCourante, n->u.tabDec_.taille);
+	if(portee == P_VARIABLE_GLOBALE)
+	{
+		printf("	%s resw %d\n",n->nom,n->u.tabDec_.taille);
+	}
+	if(portee == P_VARIABLE_LOCALE)
+	{
+		//~ printf("");
+	}
 }
 
 /*-------------------------------------------------------------------------*/

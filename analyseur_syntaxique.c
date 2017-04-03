@@ -1530,6 +1530,8 @@ int main(int argc, char **argv)
 {
 	int i;
 	n_prog *$$;
+	initialise_premiers();
+	initialise_suivants();
 	for(i=1;i<argc;i++)
 	{
 		if(strcmp(argv[i],"-l")==0)
@@ -1543,10 +1545,11 @@ int main(int argc, char **argv)
 			continue;
 		}
 		yyin = fopen(argv[i], "r");
-		if(yyin == NULL){
-		fprintf(stderr, "impossible d'ouvrir le fichier %s\n", argv[1]);
-		exit(1);
-  }
+		if(yyin == NULL)
+		{
+			fprintf(stderr, "impossible d'ouvrir le fichier %s\n", argv[1]);
+			exit(1);
+		}
 	}
 	if(analyse_lex==1)
 	{
@@ -1555,14 +1558,12 @@ int main(int argc, char **argv)
 	
 	if(analyse_synt==1)
 	{
-		initialise_premiers();
-		initialise_suivants();
+		
 		uniteCourante = yylex();
 		$$=programme();
-		//~ affiche_n_prog($$);		//Arbre abstrait
+		affiche_n_prog($$);		//Arbre abstrait
 		parcours_n_prog($$);
 	}
- 
   
   //~ if(uniteCourante == FIN)
   //~ {
